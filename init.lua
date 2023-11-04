@@ -56,6 +56,9 @@ require('options')
 -- Configure keymaps
 require('keymaps')
 
+-- Configure autocmds
+require('autocmd')
+
 -- Configure Telescope (fuzzy finder)
 require('telescope-setup')
 
