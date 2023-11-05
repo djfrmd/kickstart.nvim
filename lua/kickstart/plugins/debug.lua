@@ -32,13 +32,28 @@ return {
 
       -- You can provide additional configuration to the handlers,
       -- see mason-nvim-dap README for more information
-      handlers = {},
+      handlers = {
+        function(config)
+          -- all sources with no handler get passed here
+
+          -- Keep original functionality
+          require('mason-nvim-dap').deafult_setup(config)
+        end,
+        coreclr = function(config)
+          config.adapters = {
+            type = 'executable',
+            command = 'netcoredbg',
+            args = {'--interpreter=vscode'},
+          }
+          require('mason-nvim-dap').default_setup(config) -- don't forget this!
+        end,
+      },
 
       -- You'll need to check that you have the required things installed
       -- online, please don't ask me how to install them :)
       ensure_installed = {
         -- Update this to ensure that you have the debuggers for the langs you want
-        'delve',
+        'coreclr',
       },
     }
 
