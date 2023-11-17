@@ -37,7 +37,7 @@ return {
           -- all sources with no handler get passed here
 
           -- Keep original functionality
-          require('mason-nvim-dap').deafult_setup(config)
+          require('mason-nvim-dap').default_setup(config)
         end,
         coreclr = function(config)
           config.adapters = {
@@ -54,6 +54,7 @@ return {
       ensure_installed = {
         -- Update this to ensure that you have the debuggers for the langs you want
         'coreclr',
+        'delve',
       },
     }
 
