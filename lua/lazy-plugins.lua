@@ -12,8 +12,18 @@ require('lazy').setup({
   'tpope/vim-rhubarb',
 
   -- Detect tabstop and shiftwidth automatically
-  'tpope/vim-sleuth',
   'github/copilot.vim',
+  {
+    'salkin-mada/openscad.nvim',
+    config = function ()
+        require('openscad')
+        vim.g.openscad_load_snippets = true
+      end,
+    dependencies = {
+      'L3MON4D3/LuaSnip',
+      'lotabout/skim.vim'
+    }
+  },
 
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
@@ -67,10 +77,12 @@ require('lazy').setup({
         topdelete = { text = '‾' },
         changedelete = { text = '~' },
       },
+      numhl = true,
       on_attach = function(bufnr)
-        vim.keymap.set('n', '<leader>hp', require('gitsigns').preview_hunk, { buffer = bufnr, desc = 'GitSigns [H]unk [P]review' })
-        vim.keymap.set('n', '<leader>hs', require('gitsigns').stage_hunk, { buffer = bufnr, desc = 'GitSigns [H]unk [S]tage' })
-        vim.keymap.set('n', '<leader>hu', require('gitsigns').reset_hunk, { buffer = bufnr, desc = 'GitSigns [H]unk [U]ndo' })
+        vim.keymap.set('n', '<leader>gp', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[G]it hunk [P]review' })
+        vim.keymap.set('n', '<leader>gs', require('gitsigns').stage_hunk, { buffer = bufnr, desc = '[G]it hunk [S]tage' })
+        vim.keymap.set('n', '<leader>gu', require('gitsigns').reset_hunk, { buffer = bufnr, desc = '[G]it hunk [U]ndo' })
+        vim.keymap.set('n', '<leader>gb', require('gitsigns').blame_line, { buffer = bufnr, desc = '[G]it [B]lame line'})
 
         -- don't override the built-in and fugitive keymaps
         local gs = package.loaded.gitsigns
