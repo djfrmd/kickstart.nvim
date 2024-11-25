@@ -1,75 +1,100 @@
---[[
-
-=====================================================================
-==================== READ THIS BEFORE CONTINUING ====================
-=====================================================================
-
-Kickstart.nvim is *not* a distribution.
-
-Kickstart.nvim is a template for your own configuration.
-  The goal is that you can read every line of code, top-to-bottom, understand
-  what your configuration is doing, and modify it to suit your needs.
-
-  Once you've done that, you should start exploring, configuring and tinkering to
-  explore Neovim!
-
-  If you don't know anything about Lua, I recommend taking some time to read through
-  a guide. One possible example:
-  - https://learnxinyminutes.com/docs/lua/
-
-
-  And then you can explore or search through `:help lua-guide`
-  - https://neovim.io/doc/user/lua-guide.html
-
-
-Kickstart Guide:
-
-I have left several `:help X` comments throughout the init.lua
-You should run that command and read that help section for more information.
-
-In addition, I have some `NOTE:` items throughout the file.
-These are for you, the reader to help understand what is happening. Feel free to delete
-them once you know what you're doing, but they should serve as a guide for when you
-are first encountering a few different constructs in your nvim config.
-
-I hope you enjoy your Neovim journey,
-- TJ
-
-P.S. You can delete this when you're done too. It's your config now :)
---]]
-
--- Set <space> as the leader key
--- See `:help mapleader`
---  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
+-----------------------------------------------------------
+-- Set Leader Before Anything Else
+-----------------------------------------------------------
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
--- Install lazy plugin manager
-require('lazy-bootstrap')
+-----------------------------------------------------------
+-- Bootstrap Package Manager (Lazy)
+-----------------------------------------------------------
+local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system {
+    'git',
+    'clone',
+    '--filter=blob:none',
+    'https://github.com/folke/lazy.nvim.git',
+    '--branch=stable',
+    lazypath,
+  }
+end
+vim.opt.rtp:prepend(lazypath)
+
+-----------------------------------------------------------
+-- Plugins (from ./plugins)
+-----------------------------------------------------------
+require("lazy").setup("plugins")
+
+-----------------------------------------------------------
+-- Options
+-----------------------------------------------------------
+vim.o.hlsearch = false
+vim.wo.number = true
+vim.o.mouse = 'a'
+vim.o.clipboard = 'unnamedplus'
+vim.o.breakindent = true
+vim.o.undofile = true
+vim.o.ignorecase = true
+vim.o.smartcase = true
+vim.wo.signcolumn = 'yes'
+vim.o.updatetime = 250
+vim.o.timeoutlen = 300
+vim.o.completeopt = 'menuone,noselect'
+vim.o.termguicolors = true
+vim.o.list = true
+
+-----------------------------------------------------------
+-- Keymaps (See `:help vim.keymap.set()`)
+-----------------------------------------------------------
+vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
+
+-- Remap for dealing with word wrap
+vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
+vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+
+-- Highlight on yank (See `:help vim.highlight.on_yank()`)
+local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
+vim.api.nvim_create_autocmd('TextYankPost', {
+  callback = function()
+    vim.highlight.on_yank()
+  end,
+  group = highlight_group,
+  pattern = '*',
+})
+
+-- Diagnostic keymaps
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic message' })
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
+vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
+vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
+
+-- Configure Ctrl-c -> Esc
+vim.keymap.set('i', '<C-c>', '<Esc>')
+
+-----------------------------------------------------------
+-- AutoCommands
+-----------------------------------------------------------
+-- Remove trailing spaces on save
+vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+  pattern = { "*" },
+
+  -- Save cursor position
+  callback = function(_)
+    local save_cursor = vim.fn.getpos(".")
+    vim.cmd([[%s/\s\+$//e]])
+    vim.fn.setpos(".", save_cursor)
+  end,
+})
+
 
 -- Setup lazy plugin manager - configure plugins
-require('lazy-plugins')
+-- require('lazy-plugins')
 
--- Set options
-require('options')
+---- Configure LSP (Language Server Protocol)
+--require('lsp-setup')
+--
+---- Configure CMP (completion)
+--require('cmp-setup')
 
--- Configure keymaps
-require('keymaps')
-
--- Configure autocmds
-require('autocmd')
-
--- Configure Telescope (fuzzy finder)
-require('telescope-setup')
-
--- Configure Treesitter (syntax parser for highlighting)
-require('treesitter-setup')
-
--- Configure LSP (Language Server Protocol)
-require('lsp-setup')
-
--- Configure CMP (completion)
-require('cmp-setup')
-
--- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+

@@ -1,11 +1,3 @@
--- debug.lua
---
--- Shows how to use the DAP plugin to debug your code.
---
--- Primarily focused on configuring the debugger for Go, but can
--- be extended to other languages as well. That's why it's called
--- kickstart.nvim and not kitchen-sink.nvim ;)
-
 return {
   -- NOTE: Yes, you can install new plugins here!
   'mfussenegger/nvim-dap',
@@ -45,7 +37,7 @@ return {
           config.adapters = {
             type = 'executable',
             command = 'netcoredbg',
-            args = {'--interpreter=vscode'},
+            args = { '--interpreter=vscode' },
           }
           require('mason-nvim-dap').default_setup(config) -- don't forget this!
         end,
@@ -103,3 +95,5 @@ return {
     require('dap-go').setup()
   end,
 }
+
+-- vim: ts=2 sts=2 sw=2 et
