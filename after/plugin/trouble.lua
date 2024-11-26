@@ -5,5 +5,3 @@ vim.keymap.set('n', '<leader>xd', function() trb.toggle('document_diagnostics') 
 vim.keymap.set('n', '<leader>xq', function() trb.toggle('quickfix') end, { desc = 'Quickfix' })
 vim.keymap.set('n', '<leader>xl', function() trb.toggle('loclist') end, { desc = 'Location List' })
 vim.keymap.set('n', 'gR', function() trb.toggle("lsp_references") end, { desc = 'Lsp References' })
-
--- vim: ts=2 sts=2 sw=2 et

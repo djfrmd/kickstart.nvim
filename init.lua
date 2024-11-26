@@ -85,16 +85,3 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
     vim.fn.setpos(".", save_cursor)
   end,
 })
-
-
--- Setup lazy plugin manager - configure plugins
--- require('lazy-plugins')
-
----- Configure LSP (Language Server Protocol)
---require('lsp-setup')
---
----- Configure CMP (completion)
---require('cmp-setup')
-
--- vim: ts=2 sts=2 sw=2 et
-

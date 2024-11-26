@@ -1,5 +1,8 @@
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
+    sync_install = false,
+    ignore_install = {},
+    modules = {},
     ensure_installed = {
       'c',
       'cpp',
@@ -79,5 +82,3 @@ vim.defer_fn(function()
     },
   }
 end, 0)
-
--- vim: ts=2 sts=2 sw=2 et

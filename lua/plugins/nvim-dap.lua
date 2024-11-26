@@ -23,6 +23,7 @@ return {
       -- Makes a best effort to setup the various debuggers with
       -- reasonable debug configurations
       automatic_setup = true,
+      automatic_installation = false,
 
       -- You can provide additional configuration to the handlers,
       -- see mason-nvim-dap README for more information
@@ -95,5 +96,3 @@ return {
     require('dap-go').setup()
   end,
 }
-
--- vim: ts=2 sts=2 sw=2 et
